@@ -37,7 +37,7 @@ volatile uint8_t current_led = 0;
 volatile int8_t direction = 1;
 
 // Speed toggle variables
-#define DEBOUNCE_MS 50
+#define DEBOUNCE_MS 170
 uint32_t last_button_time[4] = {0, 0, 0, 0};
 uint8_t speed_state = 0;        // 0 = slow (1s), 1 = fast (0.5s)
 

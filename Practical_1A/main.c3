@@ -31,7 +31,7 @@ GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6, GPIO_PIN_7};
 
 // TODO: Define your debounce delay based on your oscilloscope measurement
 // measure oscilloscpe
-#define DEBOUNCE_MS 5 // should meare
+#define DEBOUNCE_MS 170 
 
 uint32_t last_button_press_time = 0;  // might want to make volatile
 // Speed state: 0 = slow (1s), 1 = fast (0.5s)
