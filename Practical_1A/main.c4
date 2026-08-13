@@ -273,7 +273,7 @@ void mode3_update(void)
         		sparkle_off_index++;
             /* TODO: Generate a new random turn-off delay for the next LED */
             /* TODO: If all LEDs are turned off, transition back to SPARKLE_IDLE state */
-        		if(sparkle_off_index >= sparkle_num_leds_on){
+        		if(sparkle_off_index > sparkle_num_leds_on){
         			sparkle_state = SPARKLE_IDLE;
         		}
         		else{
