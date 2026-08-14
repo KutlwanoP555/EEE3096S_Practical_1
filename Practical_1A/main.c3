@@ -84,7 +84,7 @@ void change_timer_period(uint32_t new_period_ms)
 // TODO: Calculate the new ARR value using your formula.
 // Note: Timer clock is 1000 Hz (Prescaler is 7999).
 uint32_t new_arr = 0; 
-	new_arr = ((new_period_ms* 1000)/(8000))-1;
+	new_arr = (new_period_ms) - 1;
 
 // TODO: Update the TIM16 ARR register directly.
 	TIM16->ARR = new_arr;
