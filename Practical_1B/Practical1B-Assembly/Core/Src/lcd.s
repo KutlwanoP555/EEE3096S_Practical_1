@@ -47,9 +47,10 @@ LCD_Run:
 
 
     @ TODO 2: Call the 4-bit initialization sequence.
-    BL LCD_Init # 
+    BL  LCD_Init
     @ TODO 3: Write the character 'A' (0x41) to the display.
-    BL LCD_WriteData #0x41
+    MOVS R0, #0x41
+    BL  LCD_WriteData
 hang:
     B    hang
 
@@ -145,14 +146,57 @@ LCD_SendNibble:
     @   R0 bit 1 -> PB9   (D5)
     @   R0 bit 2 -> PA12  (D6)
     @   R0 bit 3 -> PA15  (D7)
-    MOV  R1, R0, LSL #4 @ Move D4 to PB8
-    MOV  R2, R0, LSL #3 @ Move D5 to PB9
-    MOV  R3, R0, LSL #8 @ Move D6 to PA12
-    ORR  R3, R3, R0, LSL #12 @ Move D7 to PA15
-    LDR  R2, =GPIOA_BSRR
-    STR  R3, [R2] @ Write to GPIOA_BSRR
-    LDR  R2, =GPIOB_BSRR
-    STR  R2, [R2] @ Write to GPIOB_BSRR
+    MOVS R1, #0              @ R1 = GPIOA BSRR value
+    MOVS R2, #0              @ R2 = GPIOB BSRR value
+@-------------------------------------------------------------------
+    MOVS R3, #1
+    TST  R0, R3             @ Test bit 0 of R0 if set for D4/ preserves
+    BEQ  send_d4_low        @ if not set, branch to send_d4_low
+    LSLS R3, R3, #8         @ D4 high: set PB8/ shift bit by 8 to set bit 8 in BSRR
+    ORRS R2, R3             @ OR R2 with R3 to set PB8 high
+    B    send_d5            @ on to the next bit
+send_d4_low:
+    LSLS R3, R3, #24         @ D4 low: reset PB8
+    ORRS R2, R3
+@
+send_d5:
+    MOVS R3, #2
+    TST  R0, R3
+    BEQ  send_d5_low
+    LSLS R3, R3, #8          @ D5 high: set PB9
+    ORRS R2, R3
+    B    send_d6
+send_d5_low:
+    LSLS R3, R3, #24         @ D5 low: reset PB9
+    ORRS R2, R3
+
+send_d6:
+    MOVS R3, #4
+    TST  R0, R3
+    BEQ  send_d6_low
+    LSLS R3, R3, #10         @ D6 high: set PA12
+    ORRS R1, R3
+    B    send_d7
+send_d6_low:
+    LSLS R3, R3, #26         @ D6 low: reset PA12
+    ORRS R1, R3
+
+send_d7:
+    MOVS R3, #8
+    TST  R0, R3
+    BEQ  send_d7_low
+    LSLS R3, R3, #12         @ D7 high: set PA15
+    ORRS R1, R3
+    B    write_data_ports
+send_d7_low:
+    LSLS R3, R3, #28         @ D7 low: reset PA15
+    ORRS R1, R3
+
+write_data_ports:
+    LDR  R3, =GPIOA_BSRR
+    STR  R1, [R3]
+    LDR  R3, =GPIOB_BSRR
+    STR  R2, [R3]
 
     POP {R1, R2, R3, PC}
 
@@ -175,6 +219,13 @@ LCD_Pulse:
     @ constant of the level shifter and meet the HD44780 hold time requirements.
     @ Show your cycle arithmetic in the comments.
     @ -----------------------------------------------------------------
+    @ At 8 MHz, one CPU cycle is 1 / 8 MHz = 125 ns.
+    @ Four NOPs provide 4 * 125 ns = 500 ns of E-high settling time,
+    @ exceeding the HD44780 minimum enable pulse width of 450 ns.
+    NOP
+    NOP
+    NOP
+    NOP
 
     @ TODO 11: Set PC15 LOW.
     MOVS R2, #1

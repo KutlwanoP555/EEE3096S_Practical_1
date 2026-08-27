@@ -81,7 +81,6 @@ int main(void)
    * TODO 1
    * Start the ADC in continuous mode and start DAC channel 1, then hand
    * over to the Assembly loop.
-   *
    * HAL_ADC_Start(&hadc);
    * HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
    * DSP_Loop();
@@ -92,6 +91,10 @@ int main(void)
    *   Overrun must be set to "Overrun data overwritten", or the ADC halts
    *   the moment your Assembly reads it slower than it converts.
    */
+
+   HAL_ADC_Start(&hadc);
+   HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
+   DSP_Loop();
 
 #elif (ACTIVE_TASK == 5)
 
@@ -104,6 +107,7 @@ int main(void)
    * The LCD needs its power rail settled before the initialisation
    * sequence starts. Add the wait inside lcd.s, not here.
    */
+   LCD_Run();
 
 #else
   #error "Set ACTIVE_TASK to 4 or 5"
