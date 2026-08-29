@@ -3,8 +3,8 @@
  * EEE3096S 2026 - Practical 1B, Task 5
  * 4-bit bit-banged HD44780 driver, and the level shifter timing fault
  *
- * Student 1 : <name>  <MNKSTE007>
- * Student 2 : <name>  <MKGKAR020>
+ * Student 1 : <Kutlwano Monkoe>  <MNKSTE007>
+ * Student 2 : <Karabo Makgoba>  <MKGKAR020>
  */
 
     .syntax unified
