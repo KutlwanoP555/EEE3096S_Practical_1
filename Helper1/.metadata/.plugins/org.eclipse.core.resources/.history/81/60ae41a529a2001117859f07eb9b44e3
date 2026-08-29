@@ -3,8 +3,8 @@
  * EEE3096S 2026 - Practical 1B, Task 5
  * 4-bit bit-banged HD44780 driver, and the level shifter timing fault
  *
- * Student 1 : <Kutlwano Monkoe>  <MNKSTE007>
- * Student 2 : <Karabo Makgoba>  <MKGKAR020>
+ * Student 1 : <name>  <MNKSTE007>
+ * Student 2 : <name>  <MKGKAR020>
  */
 
     .syntax unified
@@ -74,8 +74,7 @@ LCD_Init:
     MOVS R0, #0x32 @ startup: final handover to 4-bit mode
     BL   LCD_WriteCmd
     BL   LCD_DelayShort 
-    BL   LCD_DelayShort
-    BL   LCD_DelayShort @ wait > 100 us
+    BL  LCD_DelayShort @ wait > 100 us
 
     MOVS R0, #0x28 @ function set: 4-bit, 2-line, 5x8
     BL   LCD_WriteCmd
@@ -244,7 +243,7 @@ LCD_Pulse:
 
 LCD_DelayLong:
     @ TODO 13: Implement a millisecond-scale delay. Show cycle arithmetic.
-    LDR  R0, =8000 @ Approximate cycles per millisecond at 8 MHz 1 ms delay
+    LDR  R0, =80000 @ Approximate cycles per millisecond at 8 MHz 10 ms delay
 delay_loop_long:
     SUBS R0, R0, #1
     BNE delay_loop_long
@@ -253,7 +252,7 @@ delay_loop_long:
     .type LCD_DelayShort, %function
 LCD_DelayShort:
     @ TODO 14: Implement a microsecond-scale delay. Show cycle arithmetic.
-    LDR  R0, =80 @ Approximate cycles per microsecond at 8 MHz 10 us delay
+    LDR  R0, =440 @ Approximate cycles per microsecond at 8 MHz 10 us delay
 delay_loop_short:
     SUBS R0, R0, #1
     BNE delay_loop_short

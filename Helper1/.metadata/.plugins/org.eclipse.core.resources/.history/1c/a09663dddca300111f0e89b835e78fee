@@ -74,8 +74,7 @@ LCD_Init:
     MOVS R0, #0x32 @ startup: final handover to 4-bit mode
     BL   LCD_WriteCmd
     BL   LCD_DelayShort 
-    BL   LCD_DelayShort
-    BL   LCD_DelayShort @ wait > 100 us
+    BL  LCD_DelayShort @ wait > 100 us
 
     MOVS R0, #0x28 @ function set: 4-bit, 2-line, 5x8
     BL   LCD_WriteCmd
@@ -223,10 +222,7 @@ LCD_Pulse:
     @ At 8 MHz, one CPU cycle is 1 / 8 MHz = 125 ns.
     @ Four NOPs provide 4 * 125 ns = 500 ns of E-high settling time,
     @ exceeding the HD44780 minimum enable pulse width of 450 ns.
-    NOP
-    NOP
-    NOP
-    NOP
+  
 
     @ TODO 11: Set PC15 LOW.
     MOVS R2, #1
@@ -253,7 +249,7 @@ delay_loop_long:
     .type LCD_DelayShort, %function
 LCD_DelayShort:
     @ TODO 14: Implement a microsecond-scale delay. Show cycle arithmetic.
-    LDR  R0, =80 @ Approximate cycles per microsecond at 8 MHz 10 us delay
+    LDR  R0, =8 @ Approximate cycles per microsecond at 8 MHz 10 us delay
 delay_loop_short:
     SUBS R0, R0, #1
     BNE delay_loop_short
