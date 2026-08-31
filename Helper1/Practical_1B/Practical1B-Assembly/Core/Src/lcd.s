@@ -39,11 +39,10 @@ LCD_Run:
     PUSH {LR}
 
     @ TODO 1: Wait for the LCD power rail to settle (consult datasheet).
-    BL  LCD_DelayLong @ Wait 10 ms for power rail to settle
-    BL  LCD_DelayLong @ Wait 10 ms for power rail to settle
-    BL  LCD_DelayLong @ Wait 10 ms for power rail to settle
     @ Might another delay be needed here? - safe is > 40ms
-    BL  LCD_DelayLong @ Wait 10 ms for power rail to settle
+    BL  LCD_DelayLong @ Wait 5 ms for power rail to settle
+    BL LCD_DelayLong @ Wait 5 ms for power rail to settle
+    BL LCD_DelayLong @ Wait 5 ms for power rail to settle
 
 
     @ TODO 2: Call the 4-bit initialization sequence.
@@ -73,8 +72,6 @@ LCD_Init:
 
     MOVS R0, #0x32 @ startup: final handover to 4-bit mode
     BL   LCD_WriteCmd
-    BL   LCD_DelayShort 
-    BL   LCD_DelayShort
     BL   LCD_DelayShort @ wait > 100 us
 
     MOVS R0, #0x28 @ function set: 4-bit, 2-line, 5x8
@@ -234,7 +231,7 @@ LCD_Pulse:
     STR  R2, [R0]
 
     @ TODO 12: Hold Enable low long enough to meet the LCD cycle time.
-    BL LCD_DelayShort @ wait > 55 us   
+    BL LCD_DelayShort @ 100 us delay to meet the LCD cycle time
     POP {R0, R1, R2, PC}
 
 @ ===========================================================================
@@ -244,7 +241,7 @@ LCD_Pulse:
 
 LCD_DelayLong:
     @ TODO 13: Implement a millisecond-scale delay. Show cycle arithmetic.
-    LDR  R0, =8000 @ Approximate cycles per millisecond at 8 MHz 1 ms delay
+    LDR  R0, =0x2710 @ Approximate cycles per millisecond at 8 MHz 5 ms delay
 delay_loop_long:
     SUBS R0, R0, #1
     BNE delay_loop_long
@@ -253,7 +250,7 @@ delay_loop_long:
     .type LCD_DelayShort, %function
 LCD_DelayShort:
     @ TODO 14: Implement a microsecond-scale delay. Show cycle arithmetic.
-    LDR  R0, =80 @ Approximate cycles per microsecond at 8 MHz 10 us delay
+    LDR  R0, =200 @ Approximate cycles per microsecond at 8 MHz 50 us delay
 delay_loop_short:
     SUBS R0, R0, #1
     BNE delay_loop_short
