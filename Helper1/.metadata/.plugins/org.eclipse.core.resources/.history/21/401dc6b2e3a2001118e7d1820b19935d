@@ -3,8 +3,8 @@
  * EEE3096S 2026 - Practical 1B, Task 5
  * 4-bit bit-banged HD44780 driver, and the level shifter timing fault
  *
- * Student 1 : <Kutlwano Monkoe>  <MNKSTE007>
- * Student 2 : <Karabo Makgoba>  <MKGKAR020>
+ * Student 1 : <name>  <MNKSTE007>
+ * Student 2 : <name>  <MKGKAR020>
  */
 
     .syntax unified
@@ -39,10 +39,11 @@ LCD_Run:
     PUSH {LR}
 
     @ TODO 1: Wait for the LCD power rail to settle (consult datasheet).
+    BL  LCD_DelayLong @ Wait 10 ms for power rail to settle
+    BL  LCD_DelayLong @ Wait 10 ms for power rail to settle
+    BL  LCD_DelayLong @ Wait 10 ms for power rail to settle
     @ Might another delay be needed here? - safe is > 40ms
-    BL  LCD_DelayLong @ Wait 5 ms for power rail to settle
-    BL LCD_DelayLong @ Wait 5 ms for power rail to settle
-    BL LCD_DelayLong @ Wait 5 ms for power rail to settle
+    BL  LCD_DelayLong @ Wait 10 ms for power rail to settle
 
 
     @ TODO 2: Call the 4-bit initialization sequence.
@@ -72,7 +73,8 @@ LCD_Init:
 
     MOVS R0, #0x32 @ startup: final handover to 4-bit mode
     BL   LCD_WriteCmd
-    BL   LCD_DelayShort @ wait > 100 us
+    BL   LCD_DelayShort 
+    BL  LCD_DelayShort @ wait > 100 us
 
     MOVS R0, #0x28 @ function set: 4-bit, 2-line, 5x8
     BL   LCD_WriteCmd
@@ -220,10 +222,7 @@ LCD_Pulse:
     @ At 8 MHz, one CPU cycle is 1 / 8 MHz = 125 ns.
     @ Four NOPs provide 4 * 125 ns = 500 ns of E-high settling time,
     @ exceeding the HD44780 minimum enable pulse width of 450 ns.
-    NOP
-    NOP
-    NOP
-    NOP
+
 
     @ TODO 11: Set PC15 LOW.
     MOVS R2, #1
@@ -231,7 +230,7 @@ LCD_Pulse:
     STR  R2, [R0]
 
     @ TODO 12: Hold Enable low long enough to meet the LCD cycle time.
-    BL LCD_DelayShort @ 100 us delay to meet the LCD cycle time
+    BL LCD_DelayShort @ wait > 55 us   
     POP {R0, R1, R2, PC}
 
 @ ===========================================================================
@@ -241,7 +240,7 @@ LCD_Pulse:
 
 LCD_DelayLong:
     @ TODO 13: Implement a millisecond-scale delay. Show cycle arithmetic.
-    LDR  R0, =0x2710 @ Approximate cycles per millisecond at 8 MHz 5 ms delay
+    LDR  R0, =80000 @ Approximate cycles per millisecond at 8 MHz 10 ms delay
 delay_loop_long:
     SUBS R0, R0, #1
     BNE delay_loop_long
@@ -250,7 +249,7 @@ delay_loop_long:
     .type LCD_DelayShort, %function
 LCD_DelayShort:
     @ TODO 14: Implement a microsecond-scale delay. Show cycle arithmetic.
-    LDR  R0, =200 @ Approximate cycles per microsecond at 8 MHz 50 us delay
+    LDR  R0, =440 @ Approximate cycles per microsecond at 8 MHz 44 us delay
 delay_loop_short:
     SUBS R0, R0, #1
     BNE delay_loop_short

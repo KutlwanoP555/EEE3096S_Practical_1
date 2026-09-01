@@ -3,8 +3,8 @@
  * EEE3096S 2026 - Practical 1B, Task 4
  * Cycle-counted ADC to DAC loop with a 45 degree phase delay
  *
- * Student 1 : <name>  <student number>
- * Student 2 : <name>  <student number>
+ * Student 1 : <Kutlwano Monkoe>  <MNKSTE007>
+ * Student 2 : <Karabo Makgoba>  <MKGKAR020>
  */
 
     .syntax unified

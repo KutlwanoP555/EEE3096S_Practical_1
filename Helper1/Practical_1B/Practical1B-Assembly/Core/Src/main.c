@@ -4,9 +4,9 @@
   * EEE3096S 2026 - Practical 1B
   * Tasks 4 and 5: cycle-counted phase delay, and LCD analog debugging
   *
-  * Student 1 : <name>  <MNKSTE007>
-  * Student 2 : <name>  <MKGRAR020>
-  * Date      : <date>
+  * Student 1 : <Kutlwano Monkoe>  <MNKSTE007>
+  * Student 2 : <Karabo Makgoba>  <MKGRAR020>
+  * Date      : <27 August 2026>
   *
   * This file starts the peripherals and hands control to your Assembly.
   * The work happens in Core/Src/dsp.s (Task 4) and Core/Src/lcd.s (Task 5).
@@ -32,7 +32,7 @@
 /* USER CODE BEGIN PD */
 
 /* Pick the task to run: 4 for the phase delay, 5 for the LCD. */
-#define ACTIVE_TASK   4
+#define ACTIVE_TASK   5
 
 /*
  * ADC channel for Task 4.
